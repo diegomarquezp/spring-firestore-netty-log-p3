@@ -44,7 +44,8 @@ public class EventController {
 
   @GetMapping("/reset")
   private Mono<Void> reset() {
-    return eventService.removeAllEvents();
+    eventService.removeAllEvents();
+    return Mono.empty();
   }
 
   @GetMapping("/generate")

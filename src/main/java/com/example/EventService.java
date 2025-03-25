@@ -40,8 +40,8 @@ public class EventService {
     this.eventRepository = eventRepository;
   }
 
-  public Mono<Void> removeAllEvents() {
-    return eventRepository
+  public void removeAllEvents() {
+    eventRepository
         .deleteAll();
   }
 
