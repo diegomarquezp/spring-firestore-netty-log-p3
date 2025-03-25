@@ -17,12 +17,12 @@
 package com.example;
 
 import com.google.cloud.spring.data.firestore.FirestoreReactiveRepository;
+import java.util.Date;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
 /** Demonstrates Spring Data Repository support in Firestore. */
 @Repository
-public interface UserRepository extends FirestoreReactiveRepository<User> {
-
-  Flux<User> findByAge(int age);
+public interface EventRepository extends FirestoreReactiveRepository<Event> {
+  Flux<Event> findAllByTimeSentLessThanAndProcessedAtIsNull(Date timeSent);
 }
