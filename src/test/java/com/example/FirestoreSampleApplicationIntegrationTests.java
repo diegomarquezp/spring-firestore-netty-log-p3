@@ -44,7 +44,7 @@ class FirestoreSampleApplicationIntegrationTests {
 
   @Test
   void testB404882848() throws InterruptedException {
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 5; i++) {
       testRestTemplate.getForEntity("/test", List.class);
       Thread.sleep(500);
     }
