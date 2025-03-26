@@ -54,7 +54,7 @@ public class EventController {
   }
 
   @GetMapping("/test")
-  private Flux<Event> test() {
+  private List<Event> test() {
     return eventService.getTargetedEvents();
   }
 }

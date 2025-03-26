@@ -25,12 +25,16 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.logging.Logger;
 import org.springframework.stereotype.Service;
+import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
 public class EventService {
+
+  private static final Logger LOGGER = Logger.getLogger(EventService.class.getName());
 
   private final EventRepository eventRepository;
 
@@ -45,8 +49,13 @@ public class EventService {
         .deleteAll();
   }
 
-  public Flux<Event> getTargetedEvents() {
-    return eventRepository.findAllByTimeSentLessThanAndProcessedAtIsNull(generateRandomDateAfterFeb1st2025());
+  public List<Event> getTargetedEvents() {
+    List<Event> eventsToProcess = new ArrayList<>();
+    Date cutoffDate = Date.from(Instant.now());
+    eventRepository.findAllByTimeSentLessThanAndProcessedAtIsNull(cutoffDate)
+        .doOnNext(event -> LOGGER.info(String.format("Receiving event: '%s'", event.getId())))
+        .subscribe(eventsToProcess::add);
+    return eventsToProcess;
   }
 
   public Flux<Event> insert1000Events() {
