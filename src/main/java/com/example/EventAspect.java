@@ -16,21 +16,14 @@ public class EventAspect {
 
   private static final Logger LOGGER = Logger.getLogger(EventAspect.class.getName());
 
-  private static FormalDocumentValidator formalDocumentValidator;
+  private FormalDocumentValidator formalDocumentValidator = new FormalDocumentValidator();
 
   @AfterReturning(value = "execution(* com.example.EventRepository.findAll*(..))", returning = "eventDocuments")
-  public void validateEventDocumentAfterLoad(Flux<?> eventDocuments) {
-    if (eventDocuments
-        .toStream()
-        .findFirst()
-        .isPresent()) {
-
-      LOGGER.info("Validating EventDocuments after loading");
-
-      ((Flux<Event>) eventDocuments).toStream().forEach(formalDocumentValidator::validateEventDocument);
-
-    }
+  public void validateEventDocumentAfterLoad(Flux<Event> eventDocuments) {
+    LOGGER.info("Validating EventDocuments after loading");
+    eventDocuments.subscribe(formalDocumentValidator::validateEventDocument);
   }
+
 
   class FormalDocumentValidator {
     public void validateEventDocument(Event event) {
