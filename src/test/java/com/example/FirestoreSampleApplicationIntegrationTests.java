@@ -16,6 +16,9 @@
 
 package com.example;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -44,9 +49,8 @@ class FirestoreSampleApplicationIntegrationTests {
 
   @Test
   void testB404882848() throws InterruptedException {
-    for (int i = 0; i < 5; i++) {
-      testRestTemplate.getForEntity("/test", List.class);
-      Thread.sleep(500);
-    }
+    ResponseEntity<?> result = testRestTemplate.getForEntity("/test", String.class);
+    System.out.println(result.getBody());
+    assertEquals(HttpStatusCode.valueOf(200), result.getStatusCode());
   }
 }
